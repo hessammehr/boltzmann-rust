@@ -29,8 +29,6 @@ fn update(machine: BMachine) -> State {
         let energy2 = *energy.get(&j).unwrap();
         let delta1 = (*machine.state.get(&j).unwrap() as i32 as f32) * w;
         let delta2 = (*machine.state.get(&i).unwrap() as i32 as f32) * w;
-        println!("{}<->{}: energy[{}]: {} + {}, energy[{}]: {} + {}",
-                 i, j, i, energy1, delta1, j, energy2, delta2);
         energy.insert(i, energy1 + delta1);
         energy.insert(j, energy2 + delta2);
     }
@@ -39,7 +37,6 @@ fn update(machine: BMachine) -> State {
     for i in machine.state.keys() {
         let prob = 1.0 / (1.0 + (-1.0 * energy.get(&i).unwrap()).exp());
         let a = range.ind_sample(&mut rng);
-        println!("{}, {}", prob, a);
         let new_val = a > prob;
 
         new_state.insert(*i, new_val);
