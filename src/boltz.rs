@@ -1,7 +1,7 @@
 extern crate rand;
 
 use std::collections::HashMap;
-use rand::{thread_rng, sample};
+use rand::{thread_rng};
 use rand::distributions::{Range, IndependentSample};
 
 type State = HashMap<i32, bool>;
@@ -25,21 +25,21 @@ fn update(machine: BMachine) -> State {
 
     for triples in machine.connections {
         let (i, j, w) = triples;
-        let prevEnergy = *energy.get(&i).unwrap();
-        let deltaEnergy = (*machine.state.get(&j).unwrap() as i32 as f32) * w;
-        energy.insert(i, prevEnergy + deltaEnergy);
+        let prev_energy = *energy.get(&i).unwrap();
+        let delta_energy = (*machine.state.get(&j).unwrap() as i32 as f32) * w;
+        energy.insert(i, prev_energy + delta_energy);
     }
 
-    let mut newState = HashMap::new();
+    let mut new_state = HashMap::new();
     for i in machine.state.keys() {
         let prob = 1.0 / (1.0 - energy.get(&i).unwrap().exp());
         let a = range.ind_sample(&mut rng);
-        let newVal = a > prob;
+        let new_val = a > prob;
 
-        newState.insert(*i, newVal);
+        new_state.insert(*i, new_val);
     }
 
-    return newState;
+    return new_state;
 }
 
 fn main() {
@@ -52,8 +52,8 @@ fn main() {
 
     println!("State before");
     println!("{:?}", machine.state);
-    let newState = update(machine);
+    let new_state = update(machine);
 
     println!("State after");
-    println!("{:?}", newState);
+    println!("{:?}", new_state);
 }
